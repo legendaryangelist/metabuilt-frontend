@@ -1,9 +1,10 @@
-import '../styles/globals.scss'
-import type { AppProps } from 'next/app'
+import { type AppType } from "next/dist/shared/lib/utils";
 import Layout from '../components/Layout'
 import { homePageMeta } from '../data';
 
-export default function App({ Component, pageProps }: AppProps) {
+import "../styles/globals.scss";
+
+const MyApp: AppType = ({ Component, pageProps }) => {
   const { title, description } = homePageMeta;
 
   return (
@@ -11,4 +12,6 @@ export default function App({ Component, pageProps }: AppProps) {
       <Component {...pageProps} />
     </Layout>
   )
-}
+};
+
+export default MyApp;

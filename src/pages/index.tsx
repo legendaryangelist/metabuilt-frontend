@@ -1,7 +1,8 @@
+import { type NextPage } from "next";
 import Image from 'next/image';
-import { FC, memo } from 'react';
+import { useRouter } from "next/router";
+import { memo } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
-import homeStyles from './index.module.scss';
 import userImg from "../images/user.svg";
 import thumbupImg from "../images/thumbup.svg";
 import dollImg from "../images/doll.svg";
@@ -9,7 +10,17 @@ import star1Img from "../images/star1.svg";
 import star2Img from "../images/star2.svg";
 import star3Img from "../images/star3.svg";
 
-const Home: FC = memo(() => {
+import homeStyles from './index.module.scss';
+
+const Home: NextPage = memo(() => {
+  const router = useRouter();
+
+  const handleNaviagte = (e: React.MouseEvent<HTMLDivElement, MouseEvent> | undefined, path: string) => {
+    e?.preventDefault();
+    console.log("path", path);
+    router.push(path);
+  };
+
   return (
     <div className={homeStyles.home}>
       <div className={homeStyles.description_container}>
@@ -28,8 +39,12 @@ const Home: FC = memo(() => {
 
       <Container>
         <Row>
+
           <Col sm={12} md={6} lg={6}>
-            <div className={`${homeStyles.community_description} ${homeStyles.join_community}`}>
+            <div
+              className={`${homeStyles.community_description} ${homeStyles.join_community}`}
+              onClick={(e) => handleNaviagte(e, "/communities")}
+            >
               <div className={homeStyles.star1_container}>
                 <Image layout="responsive" src={star1Img} alt="star1" />
               </div>
@@ -43,8 +58,12 @@ const Home: FC = memo(() => {
               </div>
             </div>
           </Col>
+
           <Col sm={12} md={6} lg={6}>
-            <div className={`${homeStyles.community_description} ${homeStyles.create_community}`}>
+            <div
+              className={`${homeStyles.community_description} ${homeStyles.create_community}`}
+              onClick={(e) => handleNaviagte(e, "/create")}
+            >
               <div className={homeStyles.star2_container}>
                 <Image layout="responsive" src={star2Img} alt="star2" />
               </div>
@@ -56,11 +75,12 @@ const Home: FC = memo(() => {
                 <Image layout="responsive" src={thumbupImg} alt="thumbup" />
               </div>
               <div className={homeStyles.content}>
-                <h1 className={homeStyles.content_title}>Join<br />community</h1>
-                <div className={homeStyles.content_text}>Become a part of the DAO’s on your terams</div>
+                <h1 className={homeStyles.content_title}>Create<br />community</h1>
+                <div className={homeStyles.content_text}>Start writing your Web3 story</div>
               </div>
             </div>
           </Col>
+
         </Row>
       </Container>
     </div>

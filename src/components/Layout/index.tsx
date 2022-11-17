@@ -10,13 +10,15 @@ const Layout: NextPage<HomepageMeta | any> = memo(({ children, title, descriptio
 
     return (
         <div className={layoutStyles.layout}>
-            <Head>
-                <title>{title}</title>
-                <meta content={description} name="description" />
-            </Head>
-            <Header />
-            <main style={{ width: '100%' }}>{children}</main>
-            <Footer />
+            <div className={layoutStyles.warp_container}>
+                <Head>
+                    <title>{title}</title>
+                    <meta content={description} name="description" />
+                </Head>
+                <Header />
+                <main className={layoutStyles.main_container}>{children}</main>
+                <Footer />
+            </div>
         </div>
     );
 });

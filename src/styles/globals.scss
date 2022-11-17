@@ -1,6 +1,10 @@
 @import "~bootstrap/scss/bootstrap";
 @import '@fortawesome/fontawesome-svg-core/styles.css';
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 html,
 body {
   padding: 0;
@@ -27,4 +31,25 @@ a {
     color: white;
     background: black;
   }
+}
+
+.main-blue-bg {
+  background-color: #3D50F9;
+}
+
+.main-green-bg {
+  background-color: #41F092;
+}
+
+/* For Webkit-based browsers (Chrome, Safari and Opera) */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* For IE, Edge and Firefox */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
