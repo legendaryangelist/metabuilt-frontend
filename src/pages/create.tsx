@@ -64,7 +64,7 @@ const CreateCommunity: NextPage = memo(() => {
     }, [selectedCommunityImg])
 
     return (
-        <div className="main-green-bg rounded-[20px] text-[#3D3D3D] w-full max-w-[1030px]">
+        <div className="main-green-bg rounded-[20px] text-[#3D3D3D] font-inter w-full max-w-[1030px]">
             <div className="px-[80px] py-[40px]">
                 <div className="flex space-x-[50px]">
                     <label className="flex cursor-pointer flex-col w-[125px] h-[125px] rounded-full border-none bg-white hover:bg-gray-100 relative">
@@ -83,7 +83,7 @@ const CreateCommunity: NextPage = memo(() => {
                     </label>
 
                     <div className="flex-initial w-[500px] text-left">
-                        <h1 className="text-[20px] leading-10 font-extrabold mb-[10px]">Create your community</h1>
+                        <h1 className="text-[20px] leading-10 tracking-[0.04em] font-extrabold font-grotesk mb-[10px]">Create your community</h1>
 
                         <div className="flex items-center space-x-[20px] my-[10px]">
                             <div className="flex-none w-[150px] text-[16px] font-bold">

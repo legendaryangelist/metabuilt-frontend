@@ -24,7 +24,7 @@ const Communities: NextPage = memo(() => {
     };
 
     return (
-        <div className="bg-white rounded-[20px] text-[#3D3D3D]">
+        <div className="bg-white rounded-[20px] text-[#3D3D3D] font-inter">
             <div className="px-[80px] py-[40px]">
                 <div className="flex items-center gap-[50px]">
                     <div className="w-[125px] rounded-full">
@@ -35,7 +35,7 @@ const Communities: NextPage = memo(() => {
                         />
                     </div>
                     <div className="text-left">
-                        <h1 className="text-[20px] leading-10 font-extrabold mb-[15px]">{mockData.community_name}</h1>
+                        <h1 className="text-[20px] leading-10 font-extrabold font-grotesk tracking-[0.04em] mb-[15px]">{mockData.community_name}</h1>
                         <h3 className="text-[16px] leading-5 font-normal">{mockData.community_description}</h3>
                         <div className="mt-[15px]">
                             <h5><strong>administrator:</strong> {mockData.community_owner}</h5>
@@ -47,7 +47,7 @@ const Communities: NextPage = memo(() => {
                 </div>
 
                 <div className="text-left mt-[25px]">
-                    <h1 className="text-[20px] leading-10 font-extrabold">Join community</h1>
+                    <h1 className="text-[20px] leading-10 font-extrabold font-grotesk">Join community</h1>
                     <div className="flex space-x-[20px] my-[5px] items-center">
                         <div className="flex-none w-[180px] text-[16px] font-bold">
                             signed as:
@@ -57,7 +57,7 @@ const Communities: NextPage = memo(() => {
                         </div>
                         <div className="flex-initial w-48">
                             <button
-                                className="w-full main-green-bg py-[5px] rounded-full"
+                                className="w-full main-green-bg py-[5px] rounded-full font-medium text-[16px]"
                                 onClick={(e) => handleNaviagte(e as any, `/communities/${mockData.community_id}/join`)}
                             >
                                 Join
@@ -81,7 +81,7 @@ const Communities: NextPage = memo(() => {
                 </div>
 
                 <div className="text-left mt-[25px]">
-                    <h1 className="text-[20px] leading-10 font-extrabold">Get proof</h1>
+                    <h1 className="text-[20px] leading-10 font-extrabold font-grotesk">Get proof</h1>
                     <div className="flex space-x-[20px] my-[5px] items-center">
                         <div className="flex-none w-[180px] text-[16px] font-bold">
                             signed as:
@@ -109,7 +109,7 @@ const Communities: NextPage = memo(() => {
                 </div>
 
                 <div className="text-left mt-[25px]">
-                    <h1 className="text-[20px] leading-10 font-extrabold">Verify proof</h1>
+                    <h1 className="text-[20px] leading-10 font-extrabold font-grotesk">Verify proof</h1>
                     <div className="flex space-x-[20px] my-[5px] items-center">
                         <div className="flex-none w-[180px] text-[16px] font-bold">
                             proof:

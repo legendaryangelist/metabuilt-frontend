@@ -32,9 +32,9 @@ const Home: NextPage = memo(() => {
             <span className={homeStyles.try_now_badge}>Try now</span>
           </div>
         </div>
-        <h1 className={homeStyles.title}>vStudio</h1>
-        <div className={homeStyles.text_1}>When privacy comes first</div>
-        <div className={homeStyles.text_2}>Revolution the way web3 onboarding create private<br />communities where the governance method is a choice</div>
+        <h1 className="text-[80px] font-extrabold text-white">vStudio</h1>
+        <div className="text-[20px] font-extrabold text-[#B1B1B1]">When privacy comes first</div>
+        <div className="text-[20px] font-normal font-inter text-[#B1B1B1]">Revolution the way web3 onboarding create private<br />communities where the governance method is a choice</div>
       </div>
 
       <Container>
@@ -53,8 +53,8 @@ const Home: NextPage = memo(() => {
                 <Image layout="responsive" src={userImg} alt="user" />
               </div>
               <div className={homeStyles.content}>
-                <h1 className={homeStyles.content_title}>Join<br />community</h1>
-                <div className={homeStyles.content_text}>Become a part of the DAO’s on your terams</div>
+                <h1 className="text-[20px] font-extrabold font-grotesk leading-[22px] uppercase">Join<br />community</h1>
+                <div className="text-[16px] font-normal font-inter leading-[22px] mt-2">Become a part of the DAO’s on your terams</div>
               </div>
             </div>
           </Col>
@@ -75,8 +75,8 @@ const Home: NextPage = memo(() => {
                 <Image layout="responsive" src={thumbupImg} alt="thumbup" />
               </div>
               <div className={homeStyles.content}>
-                <h1 className={homeStyles.content_title}>Create<br />community</h1>
-                <div className={homeStyles.content_text}>Start writing your Web3 story</div>
+                <h1 className="text-[20px] text-[#3D3D3D] font-extrabold font-grotesk leading-[22px] uppercase">Create<br />community</h1>
+                <div className="text-[16px] text-[#3D3D3D] font-normal font-inter leading-[22px] mt-2">Start writing your Web3 story</div>
               </div>
             </div>
           </Col>

@@ -46,7 +46,7 @@ const Communities: NextPage = memo(() => {
 
     return (
         <div className="text-white w-100 self-start">
-            <h1 className="font-extrabold text-4xl tracking-wide my-[50px]">
+            <h1 className="font-extrabold text-[40px] leading-[60px] tracking-wide my-[50px] font-grotesk tracking-[0.04em]">
                 Find your community
             </h1>
 
@@ -68,8 +68,8 @@ const Communities: NextPage = memo(() => {
                                             />
                                         </div>
                                         <div className="text-left">
-                                            <h1 className="text-lg font-extrabold">{item.community_name}</h1>
-                                            <div className="text-base">{item.community_description}</div>
+                                            <h1 className="text-[20px] leading-[40px] tracking-[0.04em] font-extrabold font-grotesk">{item.community_name}</h1>
+                                            <div className="text-[16px] leading-[22px] font-normal font-inter">{item.community_description}</div>
                                         </div>
                                     </div>
                                 </Col>

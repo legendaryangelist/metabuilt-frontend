@@ -24,7 +24,7 @@ const CommunityJoin: NextPage = memo(() => {
     };
 
     return (
-        <div className="bg-white rounded-[20px] text-[#3D3D3D]">
+        <div className="bg-white rounded-[20px] text-[#3D3D3D] font-inter">
             <div className="px-[80px] py-[40px]">
                 <div className="flex items-center gap-[50px]">
                     <div className="w-[125px] rounded-full">
@@ -35,7 +35,7 @@ const CommunityJoin: NextPage = memo(() => {
                         />
                     </div>
                     <div className="text-left">
-                        <h1 className="text-[20px] leading-10 font-extrabold mb-[15px]">{mockData.community_name}</h1>
+                        <h1 className="text-[20px] leading-10 font-extrabold font-grotesk tracking-[0.04em] mb-[15px]">{mockData.community_name}</h1>
                         <h3 className="text-[16px] leading-5 font-normal">{mockData.community_description}</h3>
                     </div>
                 </div>

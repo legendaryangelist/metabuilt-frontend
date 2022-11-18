@@ -2,11 +2,11 @@ import { type NextPage } from "next";
 import Image from 'next/image';
 import { useRouter } from "next/router";
 import { memo } from 'react';
-import { ICommunityInfo } from "../../../data/interfaces";
-import communityIcon from "../../../images/community_icon.svg";
-import badgeIcon from "../../../images/badge_icon.svg";
-import badgeStar1 from "../../../images/badge_star1.svg";
-import badgeStar2 from "../../../images/badge_star2.svg";
+import { ICommunityInfo } from "../../../../data/interfaces";
+import communityIcon from "../../../../images/community_icon.svg";
+import badgeIcon from "../../../../images/badge_icon.svg";
+import badgeStar1 from "../../../../images/badge_star1.svg";
+import badgeStar2 from "../../../../images/badge_star2.svg";
 
 const mockData: ICommunityInfo = {
     community_id: 1,
@@ -30,7 +30,7 @@ const ClaimBadge: NextPage = memo(() => {
     };
 
     return (
-        <div className="bg-white rounded-[20px] text-[#3D3D3D] relative">
+        <div className="bg-white rounded-[20px] text-[#3D3D3D] font-inter relative">
             <div className="absolute w-[150px] left-[-75px] top-[calc(50%-75px)]">
                 <Image
                     layout="responsive"
@@ -49,12 +49,12 @@ const ClaimBadge: NextPage = memo(() => {
                         />
                     </div>
                     <div className="flex-initial w-[400px] text-left">
-                        <h1 className="text-[20px] leading-10 font-extrabold mb-[15px]">{mockData.community_name}</h1>
+                        <h1 className="text-[20px] leading-10 font-extrabold font-grotesk tracking-[0.04em] mb-[15px]">{mockData.community_name}</h1>
                         <h3 className="text-[16px] leading-5 font-normal">{mockData.community_description}</h3>
                     </div>
                 </div>
 
-                <div className="main-blue-bg rounded-[20px] text-[26px] leading-[30px] px-[60px] py-[25px] text-left tracking-[0.12em] my-[30px] text-white font-extrabold relative">
+                <div className="main-blue-bg rounded-[20px] text-[20px] leading-[30px] tracking-[0.04em] px-[60px] py-[25px] text-left my-[30px] text-white font-extrabold font-grotesk relative">
                     <div className="absolute w-[150px] top-[-75px] right-[50px]">
                         <Image
                             layout="responsive"
@@ -75,11 +75,16 @@ const ClaimBadge: NextPage = memo(() => {
                         />
                     </div>
                     <div className="flex-initial w-[400px] text-left">
-                        <h1 className="text-[20px] leading-10 font-extrabold mb-[15px]">{mockData.badge_name}</h1>
+                        <h1 className="text-[20px] leading-10 font-extrabold font-grotesk tracking-[0.04em] mb-[15px]">{mockData.badge_name}</h1>
                         <h3 className="text-[16px] leading-5 font-normal">{mockData.badge_description}</h3>
                     </div>
                     <div className="flex-initial w-48">
-                        <button className="w-full main-green-bg py-[5px] rounded-full font-medium">Confirm</button>
+                        <button
+                            className="w-full main-green-bg py-[5px] rounded-full font-medium"
+                            onClick={(e) => handleNaviagte(e as any, "/communities/1/claimbadge/success")}
+                        >
+                            Confirm
+                        </button>
                     </div>
                 </div>
             </div>
