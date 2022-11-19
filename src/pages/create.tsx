@@ -5,12 +5,13 @@ import { memo, useState, useEffect } from 'react';
 import { toast } from "react-toastify";
 import { NFTStorage } from 'nft.storage';
 import * as Icon from "react-icons/fi";
-import { Spin } from "antd";
+import { Spin, Modal } from "antd";
 //@ts-ignore
 import Checkbox from "react-custom-checkbox";
 import { useWalletSelector } from "../contexts/WalletSelectorContext";
 import { useContractInteractor } from "../utils";
 import { NFT_STORAGE_API_KEY } from "../constants";
+import closeIco from "../images/close_ico.svg";
 
 const CreateCommunity: NextPage = memo(() => {
     const { selector, modal, accounts, accountId } = useWalletSelector();
@@ -25,6 +26,9 @@ const CreateCommunity: NextPage = memo(() => {
     const [previewBadgeImg, setPreviewBadgeImg] = useState<string>();
     const [badgeName, setBadgeName] = useState<string>("");
     const [badgeDescription, setBadgeDescription] = useState<string>("");
+    const [messageType, setMessageType] = useState<string>("");
+    const [message, setMessage] = useState<string>("");
+    const [showModal, setShowModal] = useState<boolean>(false);
     const [isProcessing, setIsProcessing] = useState<boolean>(false);
 
     const router = useRouter();
@@ -45,33 +49,45 @@ const CreateCommunity: NextPage = memo(() => {
 
     const handleCreateCommunity = async () => {
         if (!selectedCommunityImg) {
-            toast.warn("Please select a community image!");
+            setMessageType("Warning");
+            setMessage("Please select a community image!");
+            setShowModal(true);
             return;
         }
 
         if (!communityName) {
-            toast.warn("Please input a community name!");
+            setMessageType("Warning");
+            setMessage("Please input a community name!");
+            setShowModal(true);
             return;
         }
 
         if (!communitydescription) {
-            toast.warn("Please input a community description!");
+            setMessageType("Warning");
+            setMessage("Please input a community description!");
+            setShowModal(true);
             return;
         }
 
         if (isCreateBadge) {
             if (!selectedBadgeImg) {
-                toast.warn("Please select a badge image!");
+                setMessageType("Warning");
+                setMessage("Please select a badge image!");
+                setShowModal(true);
                 return;
             }
 
             if (!badgeName) {
-                toast.warn("Please input a badge name!");
+                setMessageType("Warning");
+                setMessage("Please input a badge name!");
+                setShowModal(true);
                 return;
             }
 
             if (!badgeDescription) {
-                toast.warn("Please input a badge description!");
+                setMessageType("Warning");
+                setMessage("Please input a badge description!");
+                setShowModal(true);
                 return;
             }
         }
@@ -91,11 +107,12 @@ const CreateCommunity: NextPage = memo(() => {
                     image: selectedCommunityImg
                 });
                 communityImgUrl = "https://ipfs.io/ipfs/" + communityImgMetadata?.data?.image?.pathname?.split('//')[1]!;
-                console.log("communityImgUrl", communityImgUrl);
             } catch (e) {
                 console.log("uploading community image error: ", e);
                 setIsProcessing(false);
-                toast.error("Failed to upload community image.");
+                setMessageType("Error");
+                setMessage("Failed to upload community image.");
+                setShowModal(true);
                 return;
             }
 
@@ -108,11 +125,12 @@ const CreateCommunity: NextPage = memo(() => {
                         image: selectedBadgeImg!
                     });
                     badgeImgUrl = "https://ipfs.io/ipfs/" + badgeImgMetadata.data.image.pathname.split('//')[1]!;
-                    console.log("badgeImgUrl", badgeImgUrl);
                 } catch (e) {
                     console.log("uploading badge image error: ", e);
                     setIsProcessing(false);
-                    toast.error("Failed to upload badge image.");
+                    setMessageType("Error");
+                    setMessage("Failed to upload badge image.");
+                    setShowModal(true);
                     return;
                 }
             }
@@ -130,15 +148,17 @@ const CreateCommunity: NextPage = memo(() => {
                 "badge_source_image": badgeImgUrl
             };
 
-            const rsp = await callMethod({ method: "add_community", args: { community_data } });
-            console.log("rsp", rsp);
-
-            toast.success("Successed to create a new community");
+            const communityId = await callMethod({ method: "add_community", args: { community_data } });
+            console.log("communityId", communityId);
+            router.push(`/communities/${communityId}`);
             setIsProcessing(false);
+            toast.success("Successed to create a new community");
         } catch (error) {
             console.log(error);
             setIsProcessing(false);
-            toast.error("Failed to create a new community.");
+            setMessageType("Error");
+            setMessage("Failed to create a new community.");
+            setShowModal(true);
         }
     }
 
@@ -239,7 +259,6 @@ const CreateCommunity: NextPage = memo(() => {
                         <Checkbox
                             icon={<Icon.FiCheck color="#41F092" size={18} />}
                             onChange={(value: any, event: any) => {
-                                console.log(value);
                                 setIsCreateBadge(value);
                             }}
                             borderColor="#3D3D3D"
@@ -318,6 +337,30 @@ const CreateCommunity: NextPage = memo(() => {
                     }
                 </div>
             </div>
+
+            <Modal
+                centered
+                maskClosable={false}
+                open={showModal}
+                footer={
+                    <div className="w-full text-center mb-[20px]">
+                        <button
+                            className="main-green-bg rounded-[20px] text-[16px] text-[#3D3D3D] font-medium font-inter leading-[32px] px-[50px]"
+                            onClick={() => setShowModal(false)}
+                        >
+                            Confirm
+                        </button>
+                    </div>
+                }
+                style={{ borderRadius: '20px' }}
+                bodyStyle={{ padding: '20px 20px', minHeight: '180px' }}
+                width={472}
+                closeIcon={<Image src={closeIco} alt="close" />}
+                onCancel={() => setShowModal(false)}
+            >
+                <h1 className="text-[20px] text-[#3D3D3D] font-extrabold font-grotesk leading-[40px] tracking-[0.04em] mb-[12px]">{messageType}</h1>
+                <h2 className="text-[16px] text-[#000000] font-normal font-inter leading-[20px]">{message}</h2>
+            </Modal>
         </Spin>
     );
 });

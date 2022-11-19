@@ -4,13 +4,13 @@ import { useRouter } from "next/router";
 import { memo, useEffect, useState } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { ICommunityInfo } from "../../data/interfaces";
-import star1Img from "../../images/star1.svg";
 import { useContractInteractor } from "../../utils";
 
 const Communities: NextPage = memo(() => {
     const router = useRouter();
     const { viewMethod } = useContractInteractor();
     const [communities, setCommunities] = useState<ICommunityInfo[]>([]);
+    const [searchWord, setSearchWord] = useState<string>("");
 
     const handleNaviagte = (e: React.MouseEvent<HTMLDivElement, MouseEvent> | undefined, path: string) => {
         e?.preventDefault();
@@ -44,8 +44,6 @@ const Communities: NextPage = memo(() => {
             }));
 
             setCommunities(communities);
-
-            console.log("communities", communities);
         } catch (e) {
             console.log("error: ", e)
         }
@@ -66,7 +64,7 @@ const Communities: NextPage = memo(() => {
             <div className="max-h-[300px] px-5 py-3 overflow-y-auto scrollbar-hide">
                 <Row>
                     {
-                        communities.map((item, index) => {
+                        communities.filter(item => item.community_name.toLowerCase().includes(searchWord.toLowerCase())).map((item, index) => {
                             return (
                                 <Col key={index} sm={12} md={6} lg={4}>
                                     <div
@@ -101,6 +99,7 @@ const Communities: NextPage = memo(() => {
                         type="text"
                         placeholder="Search"
                         className="w-full py-2 pl-4 pr-12 text-white-500 border rounded-full outline-none bg-transparent focus:bg-white focus:border-indigo-600"
+                        onChange={(e) => setSearchWord(e?.target?.value)}
                     />
                     <svg
                         xmlns="http://www.w3.org/2000/svg"

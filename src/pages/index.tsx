@@ -16,8 +16,6 @@ const Home: NextPage = memo(() => {
   const router = useRouter();
 
   const handleNaviagte = (e: React.MouseEvent<HTMLDivElement, MouseEvent> | undefined, path: string) => {
-    e?.preventDefault();
-    console.log("path", path);
     router.push(path);
   };
 

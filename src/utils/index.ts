@@ -76,3 +76,7 @@ export const useContractInteractor = () => {
 
     return { handleSignIn, handleSignOut, viewMethod, callMethod };
 }
+
+export const getRandomInt = async (max: number) => {
+    return Math.floor(Math.random() * (max + 1));
+}

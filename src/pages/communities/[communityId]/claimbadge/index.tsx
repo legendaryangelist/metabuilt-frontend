@@ -32,8 +32,6 @@ const ClaimBadge: NextPage = memo(() => {
             };
 
             setCommunityInfo(communityInfo);
-
-            console.log("result", result);
         } catch (e) {
             console.log("error: ", e);
         }

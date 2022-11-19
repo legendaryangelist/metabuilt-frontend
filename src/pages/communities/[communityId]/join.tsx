@@ -1,42 +1,72 @@
 import { type NextPage } from "next";
 import Image from 'next/image';
 import { useRouter } from "next/router";
-import { memo } from 'react';
+import { memo, useEffect, useState } from 'react';
+import { useWalletSelector } from "../../../contexts/WalletSelectorContext";
+import { useContractInteractor } from "../../../utils";
 import { ICommunityInfo } from "../../../data/interfaces";
 import communityIcon from "../../../images/community_icon.svg";
 
-const mockData: ICommunityInfo = {
-    community_id: "1",
-    community_owner: "vself.near",
-    community_name: "vSelf DAO",
-    community_description: "Web3 identity wallet with for data",
-    community_source_image: communityIcon,
-    members: [],
-    public_members: []
-}
-
 const CommunityJoin: NextPage = memo(() => {
     const router = useRouter();
+    const { viewMethod } = useContractInteractor();
+    const { selector, modal, accounts, accountId } = useWalletSelector();
+    const [communityInfo, setCommunityInfo] = useState<ICommunityInfo | null>();
+
+    const initialize = async () => {
+        try {
+            const communityId = router.query.communityId;
+            const result: any[] = await viewMethod({
+                method: "get_community",
+                args: {
+                    community_id: communityId
+                }
+            });
+
+            const communityInfo: ICommunityInfo = {
+                ...result[0],
+                community_id: communityId,
+                members: result[1],
+                public_members: result[2]
+            };
+
+            setCommunityInfo(communityInfo);
+        } catch (e) {
+            console.log("error: ", e);
+        }
+    }
 
     const handleNaviagte = (e: React.MouseEvent<HTMLDivElement, MouseEvent> | undefined, path: string) => {
         e?.preventDefault();
         router.push(path);
     };
 
+    useEffect(() => {
+        (async () => {
+            await initialize();
+        })()
+    }, []);
+
     return (
         <div className="bg-white rounded-[20px] text-[#3D3D3D] font-inter">
             <div className="px-[80px] py-[40px]">
                 <div className="flex items-center gap-[50px]">
                     <div className="w-[125px] rounded-full">
-                        <Image
-                            layout="responsive"
-                            src={mockData.community_source_image}
-                            alt="community_source_image"
-                        />
+                        {
+                            communityInfo && communityInfo?.community_source_image && (
+                                <Image
+                                    layout="responsive"
+                                    src={communityInfo?.community_source_image}
+                                    alt="community_source_image"
+                                    width={125}
+                                    height={125}
+                                />
+                            )
+                        }
                     </div>
                     <div className="text-left">
-                        <h1 className="text-[20px] leading-10 font-extrabold font-grotesk tracking-[0.04em] mb-[15px]">{mockData.community_name}</h1>
-                        <h3 className="text-[16px] leading-5 font-normal">{mockData.community_description}</h3>
+                        <h1 className="text-[20px] leading-10 font-extrabold font-grotesk tracking-[0.04em] mb-[15px]">{communityInfo?.community_name}</h1>
+                        <h3 className="text-[16px] leading-5 font-bold">{communityInfo?.community_description}</h3>
                     </div>
                 </div>
 
