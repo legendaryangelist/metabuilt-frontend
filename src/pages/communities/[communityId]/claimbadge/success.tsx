@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { useRouter } from "next/router";
 import Footer from '../../../../components/Footer';
 import Header from '../../../../components/Header';
+import { WalletSelectorContextProvider } from '../../../../contexts/WalletSelectorContext';
 import { homePageMeta } from '../../../../data';
 import successDollImg from "../../../../images/success_doll.svg";
 
@@ -34,19 +35,21 @@ BadgeClaimSuccess.getLayout = function getLayout(page: any) {
     const { title, description } = homePageMeta;
 
     return (
-        <div
-            className="bg-[#262626] h-screen bg-cover"
-            style={{ backgroundImage: "url('/bg1.svg')" }}
-        >
-            <div className='min-h-[100vh] pt-[70px]'>
-                <Head>
-                    <title>{title}</title>
-                    <meta content={description} name="description" />
-                </Head>
-                <Header />
-                <main className="h-[calc(100vh-142px)]">{page}</main>
-                <Footer />
+        <WalletSelectorContextProvider>
+            <div
+                className="bg-[#262626] h-screen bg-cover"
+                style={{ backgroundImage: "url('/bg1.svg')" }}
+            >
+                <div className='min-h-[100vh] pt-[70px]'>
+                    <Head>
+                        <title>{title}</title>
+                        <meta content={description} name="description" />
+                    </Head>
+                    <Header />
+                    <main className="h-[calc(100vh-142px)]">{page}</main>
+                    <Footer />
+                </div>
             </div>
-        </div>
+        </WalletSelectorContextProvider>
     )
 }

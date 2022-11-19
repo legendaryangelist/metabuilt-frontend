@@ -1,48 +1,61 @@
 import { type NextPage } from "next";
 import Image from 'next/image';
 import { useRouter } from "next/router";
-import { memo } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { ICommunityInfo } from "../../data/interfaces";
 import star1Img from "../../images/star1.svg";
-
-const mockData: ICommunityInfo[] = [
-    {
-        community_id: 1,
-        community_owner: "vself.near",
-        community_name: "vSelf DAO",
-        community_description: "Web3 identity wallet with for data",
-        community_source_image: star1Img,
-        members: [],
-        public_members: []
-    },
-    {
-        community_id: 2,
-        community_owner: "vself.near",
-        community_name: "vSelf DAO",
-        community_description: "Web3 identity wallet with for data",
-        community_source_image: star1Img,
-        members: [],
-        public_members: []
-    },
-    {
-        community_id: 3,
-        community_owner: "vself.near",
-        community_name: "vSelf DAO",
-        community_description: "Web3 identity wallet with for data",
-        community_source_image: star1Img,
-        members: [],
-        public_members: []
-    }
-];
+import { useContractInteractor } from "../../utils";
 
 const Communities: NextPage = memo(() => {
     const router = useRouter();
+    const { viewMethod } = useContractInteractor();
+    const [communities, setCommunities] = useState<ICommunityInfo[]>([]);
 
     const handleNaviagte = (e: React.MouseEvent<HTMLDivElement, MouseEvent> | undefined, path: string) => {
         e?.preventDefault();
         router.push(path);
     };
+
+    const initialize = async () => {
+        try {
+            const result: any[] = await viewMethod({
+                method: "get_community_list",
+                args: {
+                    from_index: 0,
+                    limit: 100
+                }
+            });
+
+            const communities = await Promise.all(result.map(async (item, _) => {
+                const rowData: ICommunityInfo = {
+                    community_id: item[0],
+                    community_owner: item[1]?.community_owner,
+                    community_name: item[1]?.community_name,
+                    community_description: item[1]?.community_description,
+                    community_source_image: item[1]?.community_source_image,
+                    badge_event_id: item[1]?.badge_event_id,
+                    badge_name: item[1]?.badge_name,
+                    badge_description: item[1]?.badge_description,
+                    badge_source_image: item[1]?.badge_source_image
+                };
+
+                return rowData;
+            }));
+
+            setCommunities(communities);
+
+            console.log("communities", communities);
+        } catch (e) {
+            console.log("error: ", e)
+        }
+    }
+
+    useEffect(() => {
+        (async () => {
+            await initialize();
+        })()
+    }, []);
 
     return (
         <div className="text-white w-100 self-start">
@@ -53,18 +66,20 @@ const Communities: NextPage = memo(() => {
             <div className="max-h-[300px] px-5 py-3 overflow-y-auto scrollbar-hide">
                 <Row>
                     {
-                        mockData.map((item, index) => {
+                        communities.map((item, index) => {
                             return (
                                 <Col key={index} sm={12} md={6} lg={4}>
                                     <div
                                         className="md:pt-[65px] md:pb-[30px] md:pl-[30px] md:pr-[50px] md:rounded-[20px] main-blue-bg relative mx-[50px] my-[20px] max-w-[520px] mx-auto cursor-pointer"
                                         onClick={(e) => handleNaviagte(e, `/communities/${item.community_id}`)}
                                     >
-                                        <div className="absolute md:w-[100px] md:h-[100px] md:top-[-30px] md:right-[-30px]">
+                                        <div className="absolute md:w-[160px] md:h-[160px] md:top-[-30px] md:right-[-30px]">
                                             <Image
                                                 layout="responsive"
                                                 src={item.community_source_image}
                                                 alt="community_source_image"
+                                                width={120}
+                                                height={120}
                                             />
                                         </div>
                                         <div className="text-left">

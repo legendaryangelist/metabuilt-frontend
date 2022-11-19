@@ -1,5 +1,8 @@
 @import "~bootstrap/scss/bootstrap";
+@import 'antd/dist/reset.css';
 @import '@fortawesome/fontawesome-svg-core/styles.css';
+@import '@near-wallet-selector/modal-ui/styles.css';
+@import "react-toastify/dist/ReactToastify.css";
 
 @import url('https://fonts.googleapis.com/css?family=Familjen+Grotesk:regular,bold,italic&subset=latin,latin-ext');
 @import url('https://fonts.googleapis.com/css?family=Space+Grotesk:regular,bold,italic&subset=latin,latin-ext');

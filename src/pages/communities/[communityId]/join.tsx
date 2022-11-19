@@ -6,7 +6,7 @@ import { ICommunityInfo } from "../../../data/interfaces";
 import communityIcon from "../../../images/community_icon.svg";
 
 const mockData: ICommunityInfo = {
-    community_id: 1,
+    community_id: "1",
     community_owner: "vself.near",
     community_name: "vSelf DAO",
     community_description: "Web3 identity wallet with for data",

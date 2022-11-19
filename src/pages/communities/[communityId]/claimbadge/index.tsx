@@ -1,33 +1,58 @@
 import { type NextPage } from "next";
 import Image from 'next/image';
 import { useRouter } from "next/router";
-import { memo } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { ICommunityInfo } from "../../../../data/interfaces";
-import communityIcon from "../../../../images/community_icon.svg";
-import badgeIcon from "../../../../images/badge_icon.svg";
 import badgeStar1 from "../../../../images/badge_star1.svg";
 import badgeStar2 from "../../../../images/badge_star2.svg";
-
-const mockData: ICommunityInfo = {
-    community_id: 1,
-    community_owner: "vself.near",
-    community_name: "vSelf DAO",
-    community_description: "Web3 identity wallet with for data",
-    community_source_image: communityIcon,
-    members: [],
-    public_members: [],
-    badge_name: "vSelf Member",
-    badge_description: "web3 identity wallet with rewards for data sharing",
-    badge_source_image: badgeIcon
-}
+import { useContractInteractor } from "../../../../utils";
+import { useWalletSelector } from "../../../../contexts/WalletSelectorContext";
 
 const ClaimBadge: NextPage = memo(() => {
     const router = useRouter();
+    const { selector, modal, accounts, accountId } = useWalletSelector();
+    const { handleSignIn, viewMethod } = useContractInteractor();
+    const [communityInfo, setCommunityInfo] = useState<ICommunityInfo | null>();
+
+    const initialize = async () => {
+        try {
+            const communityId = router.query.communityId;
+            const result: any[] = await viewMethod({
+                method: "get_community",
+                args: {
+                    community_id: communityId
+                }
+            });
+
+            const communityInfo: ICommunityInfo = {
+                ...result[0],
+                community_id: communityId,
+                members: result[1],
+                public_members: result[2]
+            };
+
+            setCommunityInfo(communityInfo);
+
+            console.log("result", result);
+        } catch (e) {
+            console.log("error: ", e);
+        }
+    }
 
     const handleNaviagte = (e: React.MouseEvent<HTMLDivElement, MouseEvent> | undefined, path: string) => {
         e?.preventDefault();
         router.push(path);
     };
+
+    const handleClaimBadge = async () => {
+
+    }
+
+    useEffect(() => {
+        (async () => {
+            await initialize();
+        })()
+    }, []);
 
     return (
         <div className="bg-white rounded-[20px] text-[#3D3D3D] font-inter relative">
@@ -42,15 +67,21 @@ const ClaimBadge: NextPage = memo(() => {
             <div className="px-[80px] py-[40px]">
                 <div className="flex items-center space-x-[50px]">
                     <div className="flex-none w-[125px] rounded-full">
-                        <Image
-                            layout="responsive"
-                            src={mockData.community_source_image}
-                            alt="community_source_image"
-                        />
+                        {
+                            communityInfo && communityInfo?.community_source_image && (
+                                <Image
+                                    layout="responsive"
+                                    src={communityInfo.community_source_image}
+                                    alt="community_source_image"
+                                    width={125}
+                                    height={125}
+                                />
+                            )
+                        }
                     </div>
                     <div className="flex-initial w-[400px] text-left">
-                        <h1 className="text-[20px] leading-10 font-extrabold font-grotesk tracking-[0.04em] mb-[15px]">{mockData.community_name}</h1>
-                        <h3 className="text-[16px] leading-5 font-normal">{mockData.community_description}</h3>
+                        <h1 className="text-[20px] leading-10 font-extrabold font-grotesk tracking-[0.04em] mb-[15px]">{communityInfo?.community_name}</h1>
+                        <h3 className="text-[16px] leading-5 font-normal">{communityInfo?.community_description}</h3>
                     </div>
                 </div>
 
@@ -68,22 +99,28 @@ const ClaimBadge: NextPage = memo(() => {
 
                 <div className="flex items-center space-x-[50px]">
                     <div className="flex-none w-[125px] rounded-full">
-                        <Image
-                            layout="responsive"
-                            src={mockData.badge_source_image!}
-                            alt="badge_source_image"
-                        />
+                        {
+                            communityInfo && communityInfo?.badge_source_image && (
+                                <Image
+                                    layout="responsive"
+                                    src={communityInfo.badge_source_image}
+                                    alt="badge_source_image"
+                                    width={125}
+                                    height={125}
+                                />
+                            )
+                        }
                     </div>
                     <div className="flex-initial w-[400px] text-left">
-                        <h1 className="text-[20px] leading-10 font-extrabold font-grotesk tracking-[0.04em] mb-[15px]">{mockData.badge_name}</h1>
-                        <h3 className="text-[16px] leading-5 font-normal">{mockData.badge_description}</h3>
+                        <h1 className="text-[20px] leading-10 font-extrabold font-grotesk tracking-[0.04em] mb-[15px]">{communityInfo?.badge_name}</h1>
+                        <h3 className="text-[16px] leading-5 font-normal">{communityInfo?.badge_description}</h3>
                     </div>
                     <div className="flex-initial w-48">
                         <button
                             className="w-full main-green-bg py-[5px] rounded-full font-medium"
-                            onClick={(e) => handleNaviagte(e as any, "/communities/1/claimbadge/success")}
+                            onClick={() => accountId ? handleClaimBadge() : handleSignIn()}
                         >
-                            Confirm
+                            {accountId ? "Confirm" : "Sign in"}
                         </button>
                     </div>
                 </div>
