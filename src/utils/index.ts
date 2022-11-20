@@ -77,6 +77,27 @@ export const useContractInteractor = () => {
     return { handleSignIn, handleSignOut, viewMethod, callMethod };
 }
 
-export const getRandomInt = async (max: number) => {
+export const getCommitment = async (nearId: string, membershipKey: string): Promise<string> => {
+    // Todo
+
+    let commitment = "";
+    return commitment;
+}
+
+export const getProof = async (communityMembers: string, nearId: string, membershipKey: string): Promise<string> => {
+    // Todo
+
+    let proof = "";
+    return proof;
+}
+
+export const verifyProof = async (communityMembers: string, proof: string): Promise<boolean> => {
+    // Todo
+
+    let result = true;
+    return result;
+}
+
+export const getRandomInt = async (max = 1000000): Promise<number> => {
     return Math.floor(Math.random() * (max + 1));
 }

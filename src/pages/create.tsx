@@ -11,7 +11,7 @@ import Checkbox from "react-custom-checkbox";
 import { useWalletSelector } from "../contexts/WalletSelectorContext";
 import { useContractInteractor } from "../utils";
 import { NFT_STORAGE_API_KEY } from "../constants";
-import closeIco from "../images/close_ico.svg";
+import NotificationModal from "../components/Modal";
 
 const CreateCommunity: NextPage = memo(() => {
     const { selector, modal, accounts, accountId } = useWalletSelector();
@@ -37,6 +37,10 @@ const CreateCommunity: NextPage = memo(() => {
         e?.preventDefault();
         router.push(path);
     };
+
+    const handleShowModal = (showModal: boolean) => {
+        setShowModal(showModal);
+    }
 
     const onSelectBadgeImage = (e: any) => {
         if (!e.target.files || e.target.files.length === 0) {
@@ -338,29 +342,12 @@ const CreateCommunity: NextPage = memo(() => {
                 </div>
             </div>
 
-            <Modal
-                centered
-                maskClosable={false}
-                open={showModal}
-                footer={
-                    <div className="w-full text-center mb-[20px]">
-                        <button
-                            className="main-green-bg rounded-[20px] text-[16px] text-[#3D3D3D] font-medium font-inter leading-[32px] px-[50px]"
-                            onClick={() => setShowModal(false)}
-                        >
-                            Confirm
-                        </button>
-                    </div>
-                }
-                style={{ borderRadius: '20px' }}
-                bodyStyle={{ padding: '20px 20px', minHeight: '180px' }}
-                width={472}
-                closeIcon={<Image src={closeIco} alt="close" />}
-                onCancel={() => setShowModal(false)}
-            >
-                <h1 className="text-[20px] text-[#3D3D3D] font-extrabold font-grotesk leading-[40px] tracking-[0.04em] mb-[12px]">{messageType}</h1>
-                <h2 className="text-[16px] text-[#000000] font-normal font-inter leading-[20px]">{message}</h2>
-            </Modal>
+            <NotificationModal
+                messageType={messageType}
+                message={message}
+                showModal={showModal}
+                handleShowModal={handleShowModal}
+            />
         </Spin>
     );
 });

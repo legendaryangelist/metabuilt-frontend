@@ -5,16 +5,39 @@ import { memo, useEffect, useState } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { ICommunityInfo } from "../../data/interfaces";
 import { useContractInteractor } from "../../utils";
+import Carousel from "react-multi-carousel";
+
+const responsive = {
+    superLargeDesktop: {
+        breakpoint: { max: 4000, min: 3000 },
+        items: 5
+    },
+    desktop: {
+        breakpoint: { max: 3000, min: 1024 },
+        items: 3
+    },
+    tablet: {
+        breakpoint: { max: 1024, min: 464 },
+        items: 2
+    },
+    mobile: {
+        breakpoint: { max: 464, min: 0 },
+        items: 1
+    }
+};
 
 const Communities: NextPage = memo(() => {
     const router = useRouter();
     const { viewMethod } = useContractInteractor();
     const [communities, setCommunities] = useState<ICommunityInfo[]>([]);
     const [searchWord, setSearchWord] = useState<string>("");
+    const [isMoving, setIsMoving] = useState<boolean>(false);
 
     const handleNaviagte = (e: React.MouseEvent<HTMLDivElement, MouseEvent> | undefined, path: string) => {
         e?.preventDefault();
-        router.push(path);
+        if (!isMoving) {
+            router.push(path);
+        }
     };
 
     const initialize = async () => {
@@ -61,35 +84,38 @@ const Communities: NextPage = memo(() => {
                 Find your community
             </h1>
 
-            <div className="max-h-[300px] px-5 py-3 overflow-y-auto scrollbar-hide">
-                <Row>
+            <div className="max-h-[300px] px-5 py-3">
+                <Carousel
+                    responsive={responsive}
+                    ssr={true}
+                    beforeChange={() => setIsMoving(true)}
+                    afterChange={() => setIsMoving(false)}
+                >
                     {
                         communities.filter(item => item.community_name.toLowerCase().includes(searchWord.toLowerCase())).map((item, index) => {
                             return (
-                                <Col key={index} sm={12} md={6} lg={4}>
-                                    <div
-                                        className="md:pt-[65px] md:pb-[30px] md:pl-[30px] md:pr-[50px] md:rounded-[20px] main-blue-bg relative mx-[50px] my-[20px] max-w-[520px] mx-auto cursor-pointer"
-                                        onClick={(e) => handleNaviagte(e, `/communities/${item.community_id}`)}
-                                    >
-                                        <div className="absolute md:w-[160px] md:h-[160px] md:top-[-30px] md:right-[-30px]">
-                                            <Image
-                                                layout="responsive"
-                                                src={item.community_source_image}
-                                                alt="community_source_image"
-                                                width={120}
-                                                height={120}
-                                            />
-                                        </div>
-                                        <div className="text-left">
-                                            <h1 className="text-[20px] leading-[40px] tracking-[0.04em] font-extrabold font-grotesk">{item.community_name}</h1>
-                                            <div className="text-[16px] leading-[22px] font-normal font-inter">{item.community_description}</div>
-                                        </div>
+                                <div
+                                    className="pt-[65px] pb-[30px] pl-[30px] pr-[50px] rounded-[20px] main-blue-bg relative mx-[20px] my-[20px] cursor-pointer"
+                                    onClick={(e) => handleNaviagte(e, `/communities/${item.community_id}`)}
+                                >
+                                    <div className="absolute md:w-[160px] md:h-[160px] md:top-[-30px] md:right-[-30px]">
+                                        <Image
+                                            layout="responsive"
+                                            src={item.community_source_image}
+                                            alt="community_source_image"
+                                            width={120}
+                                            height={120}
+                                        />
                                     </div>
-                                </Col>
+                                    <div className="text-left">
+                                        <h1 className="text-[20px] leading-[40px] tracking-[0.04em] font-extrabold font-grotesk">{item.community_name}</h1>
+                                        <div className="text-[16px] leading-[22px] font-normal font-inter">{item.community_description}</div>
+                                    </div>
+                                </div>
                             )
                         })
                     }
-                </Row>
+                </Carousel>
             </div>
 
             <div className="flex w-full justify-center items-center gap-[20px] mt-[100px]">

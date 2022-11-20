@@ -2,20 +2,29 @@ import { type NextPage } from "next";
 import Image from 'next/image';
 import { useRouter } from "next/router";
 import { memo, useEffect, useState } from 'react';
+import { Tooltip } from "antd";
+import copy from 'copy-to-clipboard';
 import { useWalletSelector } from "../../../contexts/WalletSelectorContext";
-import { useContractInteractor } from "../../../utils";
+import { getCommitment, getProof, getRandomInt, useContractInteractor } from "../../../utils";
 import { ICommunityInfo } from "../../../data/interfaces";
 import communityIcon from "../../../images/community_icon.svg";
+import { DEFAULT_TEXT, COPIED_TEXT } from "../../../constants";
 
 const CommunityJoin: NextPage = memo(() => {
     const router = useRouter();
     const { viewMethod } = useContractInteractor();
     const { selector, modal, accounts, accountId } = useWalletSelector();
     const [communityInfo, setCommunityInfo] = useState<ICommunityInfo | null>();
+    const [clipboardText, setClipboardText] = useState<string>(DEFAULT_TEXT);
+    const [commitment, setCommitment] = useState<string>("");
+    const [proof, setProof] = useState<string>("");
 
     const initialize = async () => {
         try {
-            const communityId = router.query.communityId;
+            const communityId = router?.query?.communityId;
+            const commitment = router?.query?.commitment;
+            const proof = router?.query?.proof;
+
             const result: any[] = await viewMethod({
                 method: "get_community",
                 args: {
@@ -30,6 +39,8 @@ const CommunityJoin: NextPage = memo(() => {
                 public_members: result[2]
             };
 
+            setCommitment(commitment as string);
+            setProof(proof as string);
             setCommunityInfo(communityInfo);
         } catch (e) {
             console.log("error: ", e);
@@ -45,7 +56,7 @@ const CommunityJoin: NextPage = memo(() => {
         (async () => {
             await initialize();
         })()
-    }, []);
+    }, [accountId]);
 
     return (
         <div className="bg-white rounded-[20px] text-[#3D3D3D] font-inter">
@@ -73,18 +84,33 @@ const CommunityJoin: NextPage = memo(() => {
                 <div className="text-left mt-[25px]">
                     <div className="flex space-x-[20px] my-[15px] items-center">
                         <div className="flex-none w-[110px] text-[16px] font-bold">
-                            commited:
+                            commitment:
                         </div>
                         <div className="flex-initial w-80">
-                            <input className="bg-[#F5F5F5] rounded-full w-full py-[5px] px-[15px]" placeholder="petya.near" disabled />
+                            <input
+                                className="bg-[#F5F5F5] rounded-full w-full py-[5px] px-[15px]"
+                                placeholder="your commitment"
+                                value={commitment}
+                                disabled
+                            />
                         </div>
                         <div className="flex-initial w-48">
-                            <button
-                                className="w-full main-green-bg py-[5px] rounded-full font-medium"
-                                onClick={(e) => handleNaviagte(e as any, `/communities/${router.query.communityId}/join`)}
-                            >
-                                Copy
-                            </button>
+                            <Tooltip placement="right" title={clipboardText}>
+                                <button
+                                    className="w-full main-green-bg py-[5px] rounded-full font-medium"
+                                    onClick={() => {
+                                        copy(commitment);
+                                        setClipboardText(COPIED_TEXT);
+                                    }}
+                                    onMouseOut={() => {
+                                        setTimeout(() => {
+                                            setClipboardText(DEFAULT_TEXT);
+                                        }, 300);
+                                    }}
+                                >
+                                    Copy
+                                </button>
+                            </Tooltip>
                         </div>
                     </div>
                     <div className="flex space-x-[20px] my-[10px] items-center">
@@ -92,10 +118,30 @@ const CommunityJoin: NextPage = memo(() => {
                             proof:
                         </div>
                         <div className="flex-initial w-80">
-                            <input className="bg-[#F5F5F5] rounded-full w-full py-[5px] px-[15px]" placeholder="default_random_value" disabled />
+                            <input
+                                className="bg-[#F5F5F5] rounded-full w-full py-[5px] px-[15px]"
+                                placeholder="your proof"
+                                value={proof}
+                                disabled
+                            />
                         </div>
                         <div className="flex-initial w-48">
-                            <button className="w-full main-green-bg py-[5px] rounded-full font-medium">Copy</button>
+                            <Tooltip placement="right" title={clipboardText}>
+                                <button
+                                    className="w-full main-green-bg py-[5px] rounded-full font-medium"
+                                    onClick={() => {
+                                        copy(proof);
+                                        setClipboardText(COPIED_TEXT);
+                                    }}
+                                    onMouseOut={() => {
+                                        setTimeout(() => {
+                                            setClipboardText(DEFAULT_TEXT);
+                                        }, 300);
+                                    }}
+                                >
+                                    Copy
+                                </button>
+                            </Tooltip>
                         </div>
                         <div className="flex-initial text-[14px] w-[125px]">
                         </div>
@@ -120,7 +166,7 @@ const CommunityJoin: NextPage = memo(() => {
                         <div className="flex-initial w-48">
                             <button
                                 className="w-full main-green-bg py-[5px] rounded-full font-medium"
-                                onClick={(e) => handleNaviagte(e as any, `/communities/${router.query.communityId}/claimbadge`)}
+                                onClick={(e) => handleNaviagte(e as any, `/communities/${router.query.communityId}/claimbadge?commitment=${commitment}`)}
                             >
                                 Claim badge
                             </button>
